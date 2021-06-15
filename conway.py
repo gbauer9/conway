@@ -20,7 +20,7 @@ class Board():
 
         for i in range(self.size):
             for j in range(self.size):
-                
+                pass
         return
 
     def __repr__(self):
