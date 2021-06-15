@@ -1,0 +1,1 @@
+Basic python implementation of conway's game of life for fun.
