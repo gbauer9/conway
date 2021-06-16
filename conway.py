@@ -1,4 +1,6 @@
-import random, time, os
+import random
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 from copy import deepcopy
 
 class Board():
@@ -10,9 +12,9 @@ class Board():
             self.state = init
             self.size = len(init)
         else:
-            raise TypeError("Board initialization is either an int N representing the dimensions or a 2d array")
+            raise TypeError("Board initialization must be an int representing the (square) dimensions or a 2d array")
 
-    def updateBoard(self):
+    def updateBoard(self, *args):
         new_state = deepcopy(self.state)
         num_neighbors = 0
 
@@ -30,13 +32,13 @@ class Board():
                 if self.state[i][j] == 1 and (num_neighbors > 3 or num_neighbors < 2):
                     new_state[i][j] = 0
                 elif self.state[i][j] == 0 and num_neighbors == 3:
-                    print("Got here!")
-                    new_state[i][j] == 1
+                    new_state[i][j] = 1
                 else:
                     new_state[i][j] = self.state[i][j]
 
         self.state = new_state
-        return
+        scene.set_array(self.state)
+        return scene,
 
     def __repr__(self):
         return '\n'.join([''.join(str(x)) for x in self.state])
@@ -44,20 +46,10 @@ class Board():
     def __getitem__(self, key):
         return self.state[key]
 
-b = Board([[0, 0, 0], [1, 1, 1], [0, 0, 0]])
-timesteps = 0
+#b = Board([[0, 0, 0, 0, 0], [0, 1, 1, 1, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]])
+b = Board(10)
 
-os.system('clear')
-print(b)
-print(f"Step {timesteps}")
-
-while True:
-    time.sleep(1)
-    b.updateBoard()
-    timesteps += 1
-    print(b)
-    print(f"Step {timesteps}")
-    
-    if sum(map(sum, b)) == 0:
-        print(f"Game ended after {timesteps} steps")
-        break
+fig = plt.figure()
+scene = plt.imshow(b.state, animated=True)
+ani = animation.FuncAnimation(fig, b.updateBoard, interval=500, blit=True)
+plt.show()
